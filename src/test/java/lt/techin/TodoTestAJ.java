@@ -3,14 +3,18 @@ package lt.techin;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.logging.Logger;
+import org.junit.platform.commons.logging.LoggerFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TodoTestAJ {
 
-    WebDriver driver;
-    TodoPage todoPage;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TodoTestAJ.class);
+
+    private WebDriver driver;
+    private TodoPage todoPage;
 
     @BeforeEach
     void setup() {
@@ -20,20 +24,21 @@ public class TodoTestAJ {
     }
 
     @Test
-    void testAddTodo() {
-        String todo = "aaaa";
-        int sizeBefore = todoPage.getNumberOfTodos();
-        todoPage.addTodo(todo);
-        assertThat(todoPage.isTodoPresent(todo))
+    void shouldAddTodoItemSuccessfully() {
+        String newItem = "Complete Selenium Test";
+        int initialTodoCount = todoPage.getNumberOfTodos();
+
+        todoPage.addTodo(newItem);
+        assertThat(todoPage.isTodoPresent(newItem))
             .withFailMessage("Todo item should be present after adding.")
             .isTrue();
         assertThat(todoPage.getNumberOfTodos())
             .withFailMessage("Number of todos should increase after adding a new item.")
-            .isEqualTo(sizeBefore + 1);
+            .isEqualTo(initialTodoCount + 1);
     }
 
     @Test
-    void testDeleteTodo() {
+    void shouldDeleteTodoItemSuccessfully() {
         String todoToDelete = "to be deleted";
         todoPage.addTodo(todoToDelete);
         assertThat(todoPage.isTodoPresent(todoToDelete))
@@ -46,7 +51,7 @@ public class TodoTestAJ {
     }
 
     @Test
-    void testMarkTodoCompleted() {
+    void shouldMarkTodoItemAsCompleted() {
         String todoToMark = "to be marked";
         todoPage.addTodo(todoToMark);
         assertThat(todoPage.isTodoPresent(todoToMark))
